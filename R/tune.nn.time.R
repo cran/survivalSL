@@ -55,23 +55,14 @@ tune.nn.time <- function(times, failures, group=NULL,
     data=xx$train
     newdata=xx$valid
     
+    
     if(!(is.null(group))){
-      .data <- data[,c(times, failures, group, cov.quanti, cov.quali)]
-    }
-    else{
-      .data <- data[,c(times, failures, cov.quanti, cov.quali)]
-    }
+      .data <- data[,c(times, failures, group, cov.quanti, cov.quali)]}   else{
+        .data <- data[,c(times, failures, cov.quanti, cov.quali)] }
+    
     .f  <- as.formula(paste("Surv(", times, ",", failures, ")", "~."))
     
-    
-    #set.seed(seed)
-    #np <- reticulate::import("numpy")
-    #np$random$seed(as.integer(seed))
-    #torch <- reticulate::import("torch")
-    #torch$manual_seed(as.integer(seed))
-    # .deepsurv <- deepsurv(.f, data = .data,  verbose = FALSE, num_nodes=n.nodes,
-    #                       weight_decay=decay, num_workers = 0)
-    
+  
     .deepsurv <- deepsurv(.f, data = .data,  verbose = FALSE, num_nodes=n.nodes,
                           weight_decay=decay, num_workers = 0L,batch_size=as.integer(batch_size),
                           epochs=as.integer(epochs))

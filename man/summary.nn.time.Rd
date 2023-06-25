@@ -29,23 +29,23 @@ Return goodness-of-fit indicators of survival neural network obtained by the fun
 The following metrics are returned: "brier" for the Brier score at the prognostic time \code{pro.time}, "ibs" for the Integrated Brier score up to the last observed time of event, "ibll" for the Integrated Binomial Log-likelihood up to the last observed time of event, "bll" for the binomial Log-likelihood, "ribs" for the restricted Integrated Brier score up to the prognostic time \code{pro.time}, "ribll" for the restricted Integrated Binomial Log-likelihood Log-likelihood up to the last observed time of event, "bll" for the binomial Log-likelihood, "auc" for the area under the time-dependent ROC curve up to the prognostic time \code{pro.time}.
 }
 
-\examples{
-data(dataDIVAT2)
+%\examples{
+%data(dataDIVAT2)
 
-# The training of the random forest with the first 300 patients
-\donttest{
-model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:300,],
- cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
-  decay=.01, batch.size=256L, epochs = 1L)}
+%# The training of the random forest with the first 300 patients
+%\donttest{
+%model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:300,],
+% cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
+%  decay=.01, batch.size=256L, epochs = 1L)}
   
-# The prognostic capacities from the same training sample
-# (up to 4 years forseveral indicators)
-\donttest{summary(model, pro.time=4)}
+%# The prognostic capacities from the same training sample
+%# (up to 4 years forseveral indicators)
+%donttest{summary(model, pro.time=4)}
 
-# The prognostic capacities from a validation of the next 150 patients
-# (up to 4 years forseveral indicators)
-\donttest{summary(model, pro.time=4, newdata=dataDIVAT2[301:500,], times="times",
-  failures="failures")}
-}
+%# The prognostic capacities from a validation of the next 150 patients
+%# (up to 4 years forseveral indicators)
+%\donttest{summary(model, pro.time=4, newdata=dataDIVAT2[301:500,], times="times",
+%  failures="failures")}
+%}
 
 \keyword{Summarizing}

@@ -28,29 +28,29 @@ Predict the survival of new observations based on a neural network estimated by 
   \code{\link{nn.time}}.
 }
 
-\examples{
+%\examples{
 
-data(dataDIVAT2)
+%data(dataDIVAT2)
 
-# The estimation of the training model
+%# The estimation of the training model
 
-\donttest{
-model<-nn.time(times="times", failures="failures", data=dataDIVAT2,
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-  n.nodes=10, decay=0, batch.size=128, epochs=10)}
+%\donttest{
+%model<-nn.time(times="times", failures="failures", data=dataDIVAT2,
+%  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
+%  n.nodes=10, decay=0, batch.size=128, epochs=10)}
 
-# Predicted survival from the validation sample
+%# Predicted survival from the validation sample
 
-\donttest{
-pred <- predict(model,
-  newdata=data.frame(age=c(52,52), hla=c(0,1), retransplant=c(1,1), ecd=c(0,1)))
+%\donttest{
+%pred <- predict(model,
+%  newdata=data.frame(age=c(52,52), hla=c(0,1), retransplant=c(1,1), ecd=c(0,1)))
+%
+% plot(y=pred$predictions[1,], x=pred$times, xlab="Time (years)",
+%  ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))
 
- plot(y=pred$predictions[1,], x=pred$times, xlab="Time (years)",
-  ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))
+% lines(y=pred$predictions[2,], x=pred$times, col=2, type="l", lty=1, lwd=2)
 
- lines(y=pred$predictions[2,], x=pred$times, col=2, type="l", lty=1, lwd=2)
-
- legend("bottomright", col=c(1,2), lty=1, lwd=2, c("Subject #1", "Subject #2"))}
-}
+% legend("bottomright", col=c(1,2), lty=1, lwd=2, c("Subject #1", "Subject #2"))}
+%}
 
 \keyword{Predicting}

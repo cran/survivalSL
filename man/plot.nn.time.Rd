@@ -42,19 +42,18 @@ A calibration plot of an object of the class \code{nn.time}.
   \code{\link{nn.time}}.
 }
 
-\examples{
+%\examples{
 
+%\donttest{
+%data(dataDIVAT2)
+%model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
+%  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5, decay=.01,
+%                 batch.size=256L, epochs = 1L)}
 
-\donttest{
-data(dataDIVAT2)
-model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5, decay=.01,
-                 batch.size=256L, epochs = 1L)}
-
-# The calibration plot from the validation sample of 150 patients
-\donttest{plot(model, n.groups=5, pro.time=12, col=2,
-     xlab="Predicted 12-year survival", ylab="Observed 12-year survival",
-     newdata=dataDIVAT2[151:300,], times="times", failures="failures")}
-}
+%# The calibration plot from the validation sample of 150 patients
+%\donttest{plot(model, n.groups=5, pro.time=12, col=2,
+%     xlab="Predicted 12-year survival", ylab="Observed 12-year survival",
+%     newdata=dataDIVAT2[151:300,], times="times", failures="failures")}
+%}
 
 \keyword{Plotting}

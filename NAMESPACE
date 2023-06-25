@@ -65,6 +65,8 @@ export(auc)
 export(roc.time)
 export(metric)
 
+export(differentiation)
+
 S3method(summary, flexsurv)
 S3method(summary, cox)
 S3method(summary, rf.time)

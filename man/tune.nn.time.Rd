@@ -42,30 +42,30 @@ Katzman et al.  DeepSurv: personalized treatment recommender system using a Cox 
 https://doi.org/10.1186/s12874-018-0482-1
 }
 
-\examples{
-data(dataDIVAT2)
+%\examples{
+%data(dataDIVAT2)
 
-# The estimation of the hyperparameters
-\donttest{
-tune.model<-tune.nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
-    cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-    cv=3, n.nodes=c(1, 2), decay=0, batch.size=256L, epochs=1L)}
+%# The estimation of the hyperparameters
+%\donttest{
+%tune.model<-tune.nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
+%    cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
+%    cv=3, n.nodes=c(1, 2), decay=0, batch.size=256L, epochs=1L)}
 
-# the estimated nodesize value
-\donttest{
- tune.model$optimal
- tune.model$results}
+%# the estimated nodesize value
+%\donttest{
+% tune.model$optimal
+% tune.model$results}
 
-# The estimation of the training modelwith the corresponding lambda value
-\donttest{
- model<-nn.time(times="times", failures="failures", data=dataDIVAT2,
-   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-   n.nodes=tune.model$optimal$n.nodes, decay=0, batch.size=256L, epochs=1L)}
+%# The estimation of the training modelwith the corresponding lambda value
+%\donttest{
+% model<-nn.time(times="times", failures="failures", data=dataDIVAT2,
+%   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
+%   n.nodes=tune.model$optimal$n.nodes, decay=0, batch.size=256L, epochs=1L)}
 
-# The resulted predicted survival of the first subject of the training sample
-\donttest{
-plot(y=model$predictions[1,], x=model$times, xlab="Time (years)",
- ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))}
-}
+%# The resulted predicted survival of the first subject of the training sample
+%\donttest{
+%plot(y=model$predictions[1,], x=model$times, xlab="Time (years)",
+% ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))}
+%}
 
 \keyword{Tunning}

@@ -14,6 +14,9 @@ plot.nn.time <- function(x, ..., col=1, lty=1, lwd=1, type="b", pch = 16, ylab=N
   
   if(is.null(pro.time)) {pro.time <- median(times)}
   
+  dim(pred.matrix)
+  length(pred.times)
+  
   .pred <- pred.matrix[,pred.times<pro.time][,sum(pred.times<pro.time)]
   
   .grps <- as.numeric(cut(.pred, 

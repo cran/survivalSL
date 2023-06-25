@@ -46,22 +46,22 @@ The survival neural network is obtained by using the \code{deepsurv} function fr
 Katzman, J. L., Shaham, U., Cloninger, A., Bates, J., Jiang, T., & Kluger, Y. (2018). DeepSurv: personalized treatment recommender system using a Cox proportional hazards deep neural network. BMC Medical Research Methodology, 18(1), 24. https://doi.org/10.1186/s12874-018-0482-1
 }
 
-\examples{
+%\examples{
 
-data(dataDIVAT2)
+%data(dataDIVAT2)
 
-# The estimation of the model from the first 500 individuals
+%# The estimation of the model from the first 500 individuals
 
-\donttest{
-model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
-  decay=.01, batch.size=256L, epochs = 1L)}
+%\donttest{
+%model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
+%  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
+%  decay=.01, batch.size=256L, epochs = 1L)}
                  
-# The predicted survival of the first subject of the training sample
+%# The predicted survival of the first subject of the training sample
 
-\donttest{
-plot(y=model$predictions[1,], x=model$times, xlab="Time (years)",
- ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))}
-}
+%\donttest{
+%plot(y=model$predictions[1,], x=model$times, xlab="Time (years)",
+% ylab="Predicted survival", col=1, type="l", lty=1, lwd=2, ylim=c(0,1))}
+%}
 
 \keyword{Super Learner Library}

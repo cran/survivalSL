@@ -1,24 +1,11 @@
 
-#times="times"
-#failures="failures"
-#data=dataDIVAT2[1:500,]
-#cov.quanti=c("age")
-#cov.quali=c("hla", "retransplant", "ecd")
-#n.nodes=5
-#decay=.01
-#batch.size=256L
-#epochs = 1L
-
 nn.time <- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
                       data, n.nodes, decay,
                       batch.size, epochs){
 
   if(!(is.null(group))){
-    .data <- data[,c(times, failures, group, cov.quanti, cov.quali)]
-  }
-  else{
-    .data <- data[,c(times, failures, cov.quanti, cov.quali)]
-  }
+    .data <- data[,c(times, failures, group, cov.quanti, cov.quali)] } else{
+    .data <- data[,c(times, failures, cov.quanti, cov.quali)]   }
 
   .f  <- as.formula(paste("Surv(", times, ",", failures, ")", "~."))
   
@@ -26,6 +13,7 @@ nn.time <- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL
                         weight_decay=decay, num_workers =0L,
                         batch_size=batch.size,
                         epochs=epochs)
+  
   # .time <- .time.deepsurv <- sort(unique(.data[,times]))
   .time <- sort(unique(.data[,times]))
 

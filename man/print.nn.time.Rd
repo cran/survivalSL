@@ -23,15 +23,15 @@ Print the survival neural network.
 
 \value{No return value for this S3 method.}
 
-\examples{
-\donttest{
-data(dataDIVAT2)
+%\examples{
+%\donttest{
+%data(dataDIVAT2)
 
-model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
-  decay=.01, batch.size=256L, epochs = 1L)
+%model<-nn.time(times="times", failures="failures", data=dataDIVAT2[1:500,],
+%  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), n.nodes=5,
+%  decay=.01, batch.size=256L, epochs = 1L)
   
-print(model)}
-}
+%print(model)}
+%}
 
 \keyword{Printing}
