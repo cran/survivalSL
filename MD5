@@ -1,4 +1,4 @@
-af29ed94e0e7d86d289842bca9a8b4dd *DESCRIPTION
+ffbf83c248f2c99085114e902e2ac53f *DESCRIPTION
 411c75ec5839dc99a8efabcd0a1c7b39 *NAMESPACE
 77f010c23163718e1aa311d9b6520143 *R/LIB_AFTgamma.R
 15d04289c46c3763ed098d9276ee5e9d *R/LIB_AFTggamma.R
@@ -33,6 +33,7 @@ de4cec2c94931b1b3df3df9e57cc595e *R/tuneCOXridge.R
 bd8f7f376cccead5d6e954f73f0735f6 *R/tunePHspline.R
 462a134d6b7f7708e8b9e5f4d55eccbf *R/tuneRSF.R
 a6111fddafeedbbb0eadcdd6c8cd0d76 *R/tuneSNN.R
+954577fe9737c7f5fb6687aa90c8854b *README.md
 570e495efcbc2542bf799b691f7c49c5 *data/dataDIVAT2.rda
 243c833d5bfcbad3fe263c32550f9e87 *data/dataDIVAT3.rda
 2d06d14f04cc760ea02019ffcf0619e8 *data/dataOFSEP.rda
@@ -49,7 +50,7 @@ fdddad2487c375b9e7b486b8a7fae858 *man/LIB_COXridge.Rd
 b68e661c8662cf317c5ed6c386dd789b *man/LIB_PHgompertz.Rd
 fea688a18ef134fb477fe5018db86c45 *man/LIB_PHspline.Rd
 d204b20a99ac9c1ad47d60a501df754d *man/LIB_RSF.Rd
-9a1e62ab2119c6b042f907e4b9b57d54 *man/LIB_SNN.Rd
+40362c69cf77deedaca3c3e522fb424b *man/LIB_SNN.Rd
 cd696002e60e2e73b9c327ffc2bc5262 *man/dataDIVAT2.Rd
 1ebc23d74804b9670a0b96108e85cd92 *man/dataDIVAT3.Rd
 749a036d1da78fa88a5166187b527219 *man/dataOFSEP.Rd
