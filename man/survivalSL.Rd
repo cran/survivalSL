@@ -55,7 +55,8 @@ The following learners are available:
   \code{"LIB_COXridge"} \tab   Ridge Cox model \tab glmnet  \cr
   \code{"LIB_RSF"} \tab Survival Random Forest \tab
   randomForestSRC  \cr
-  \code{"LIB_SNN"} \tab Survical Neural Network  \tab survivalmodels \cr }
+  \code{"LIB_SNN"} \tab (Python-based) Survival Neural Network \tab survivalmodels \cr
+  \code{"LIB_PLANN"} \tab (Python-based) Survival Neural Network \tab survivalPLANN \cr}
 
 The following loss functions for the estimation of the super learner weigths are available (\code{metric}):
 \itemize{
@@ -91,10 +92,10 @@ Polley E and van der Laanet M. Super Learner In Prediction. http://biostats.bepr
 \examples{
 data(dataDIVAT2)
 
-#The outcome model base on a Super Learner and the first 150 individuals of the data base
+# The Super Learner based from the first 300 individuals of the data base
 sl1 <- survivalSL(methods=c("LIB_AFTgamma", "LIB_PHgompertz"),  metric="ci",
-  data=dataDIVAT2[1:150,],  times="times", failures="failures", group="ecd",
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant"), cv=3)
+  data=dataDIVAT2[1:300,],  times="times", failures="failures", group="ecd",
+  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant"), cv=5)
 
 # Individual prediction
 pred <- predict(sl1, newdata=data.frame(age=c(52,52), hla=c(0,1),
