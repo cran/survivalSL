@@ -1,4 +1,4 @@
-bc3d19de5140ab0b15c3ad95fd4a4215 *DESCRIPTION
+434a98b423c64cc7a42a033ae0fbd181 *DESCRIPTION
 f303244c6f20af5c831b6fab15d6e5a6 *NAMESPACE
 77f010c23163718e1aa311d9b6520143 *R/LIB_AFTgamma.R
 15d04289c46c3763ed098d9276ee5e9d *R/LIB_AFTggamma.R
@@ -68,12 +68,12 @@ c8b95193addec82c0ee07aca28df6885 *man/predict.libsl.Rd
 2c99cf95f35c8f0afdf705918dcb96ca *man/roc.Rd
 5fe99b091b11c311e37dfea494c05c68 *man/summary.libsl.Rd
 ef2690226280a64506815f4032da106d *man/summary.sltime.Rd
-98b66c4d318c7824e1bcb2a2dcba3d2a *man/survivalSL.Rd
+ca698ce7a116bef7ba6781cdc1ed62a2 *man/survivalSL.Rd
 c581b2986e80b8b61032f506c133e981 *man/tuneCOXaic.Rd
 03c77dbb76cf3f51d6584d43c7b174b0 *man/tuneCOXen.Rd
 5fbf040f9b5dbe5bf3df9d2abf182c59 *man/tuneCOXlasso.Rd
 0c991199efde48926030ec4a474f1c63 *man/tuneCOXridge.Rd
-6ffefcd66355527a0e40ff3d20342205 *man/tunePHspline.Rd
+d0023423beb757d1b8787f09ea6b9b3c *man/tunePHspline.Rd
 2761dce7fcb7762954148303e205b84f *man/tunePLANN.Rd
 b71161c1871b98ef82efd20c0dee91f4 *man/tuneRSF.Rd
 0e8869c853802ad2c3f9be4feaf5f2d1 *man/tuneSNN.Rd
