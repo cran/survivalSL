@@ -1,9 +1,13 @@
 
 tuneSNN <- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-                           data, cv=10, n.nodes, decay, batch.size, epochs){
+                           data, cv=10, n.nodes, decay, batch.size, epochs,seed=NULL){
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   data.nn <- data[,c(times, failures, group, cov.quanti, cov.quali)]
-
+  set.seed(seed)
   sample_id <- sample(nrow(data.nn))
   folds <- cut(seq(1,nrow(data.nn)), breaks=cv, labels=FALSE)
   folds_id <- folds[sample_id]

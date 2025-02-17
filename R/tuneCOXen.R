@@ -1,6 +1,12 @@
 
 tuneCOXen<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL, data, cv=10,
-                       parallel=FALSE, alpha, lambda){
+                       parallel=FALSE, alpha, lambda,seed=NULL){
+  
+  
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   .outcome <- paste("Surv(", times, ",", failures, ")")
 
@@ -70,8 +76,12 @@ tuneCOXen<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NUL
   }
   .results<-c()
   for( a in 1:length(alpha)){
+    set.seed(seed)
+    foldid <- sample(rep(seq(cv), length.out = nrow(.x)))
     .cv.en<-glmnet::cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance",
-                              foldsid="folds", parallel = parallel, alpha=alpha[a],
+                              nfolds = cv,
+                              foldid = foldid,
+                              parallel = parallel, alpha=alpha[a],
                               # penalty.factor = c(0, rep(1, .l-1)),
                               lambda=lambda)
     .results<-rbind(.results,
@@ -86,6 +96,5 @@ tuneCOXen<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NUL
                            lambda=.results[which(.results$cvm==min(.results$cvm)),2] ),
                            results = .results))
 }
-
 
 

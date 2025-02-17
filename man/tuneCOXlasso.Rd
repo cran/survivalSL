@@ -11,7 +11,7 @@ This function finds the optimal lambda parameter for a Lasso Cox regression.
 
 \usage{
 tuneCOXlasso(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-data, cv=10, parallel=FALSE, lambda)
+data, cv=10, parallel=FALSE, lambda, seed=NULL)
 }
 
 \arguments{
@@ -24,16 +24,18 @@ data, cv=10, parallel=FALSE, lambda)
   \item{cv}{The value of the number of folds. The default value is 10.}
   \item{parallel}{If \code{TRUE}, use parallel \code{foreach} to fit each fold. The default is \code{FALSE}.}
   \item{lambda}{The values of the regularization parameter lambda optimized over.}
+   \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
  }
 
 \details{
-The function runs the \code{cv.glmnet} function of the \code{glmnet} package.
+The function runs the \code{cv.glmnet} function of the \code{glmnet} package and the \code{glmnet_basesurv} function of the \code{hdnom} package.
 }
 
 \value{
-\item{optimal}{The value of lambda that gives the minimum mean cross-validated error.}
-\item{results}{The data frame with the mean cross-validated errors for each lambda values.}
+\item{optimal}{The value of lambda that gives the minimum mean deviance.}
+\item{results}{The data frame with the mean deviance for each lambda values.}
 }
+
 
 \references{
 Simon et al. (2011) Regularization Paths for Cox's Proportional Hazards Model via Coordinate Descent, Journal of Statistical Software, Vol. 39(5), 1-13, https://www.jstatsoft.org/v39/i05/
@@ -44,7 +46,7 @@ data(dataDIVAT2)
 
 tune.model <- tuneCOXlasso(times="times", failures="failures", data=dataDIVAT2,
   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-  cv=5, lambda=seq(0, 10, by=.1))
+  cv=5, lambda=seq(0, 10, by=.1), seed=42)
 
 tune.model$optimal$lambda # the estimated lambda value
 

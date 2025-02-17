@@ -11,7 +11,7 @@ This function finds the optimal number of knots of the spline function.
 
 \usage{
 tunePHspline(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-data, cv=10, k)
+data, cv=10, k, seed=NULL)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ data, cv=10, k)
   \item{data}{A data frame for training the model in which to look for the variables related to the status of the follow-up time (\code{times}), the event (\code{failures}), the optional treatment/exposure (\code{group}) and the covariables included in the previous model (\code{cov.quanti} and \code{cov.quali}).}
     \item{cv}{The value of the number of folds. The default value is 10.}
   \item{k}{The number of knots optimized over.}
+   \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
  }
 
 \details{
@@ -45,7 +46,7 @@ data(dataDIVAT2)
 
 tune.model <- tunePHspline(times="times", failures="failures", data=dataDIVAT2[1:150,],
     cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-    cv=3, k=1:2)
+    cv=3, k=1:2, seed=42)
 
 # the estimated nodesize value
 

@@ -11,7 +11,7 @@ This function finds the optimal lambda parameter for a ridge Cox regression.
 
 \usage{
 tuneCOXridge(times, failures, group=NULL, cov.quanti=NULL,
-cov.quali=NULL, data, cv=10, parallel=FALSE, lambda)
+cov.quali=NULL, data, cv=10, parallel=FALSE, lambda, seed=NULL)
 }
 
 \arguments{
@@ -24,10 +24,11 @@ cov.quali=NULL, data, cv=10, parallel=FALSE, lambda)
   \item{cv}{The value of the number of folds. The default value is 10.}
   \item{parallel}{If \code{TRUE}, use parallel \code{foreach} to fit each fold. The default is \code{FALSE}.}
   \item{lambda}{The values of the regularization parameter lambda optimized over.}
+  \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
  }
 
 \details{
-The function runs the \code{cv.glmnet} function of the \code{glmnet} package.
+The function runs the \code{cv.glmnet} function of the \code{glmnet} package and the \code{glmnet_basesurv} function of the \code{hdnom} package.
 }
 
 \value{
@@ -44,7 +45,7 @@ data(dataDIVAT2)
 
 tune.model <- tuneCOXridge(times="times", failures="failures", data=dataDIVAT2,
   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
-  cv=5, lambda=seq(0, 10, by=.1))
+  cv=5, lambda=seq(0, 10, by=.1), seed=42)
 
 tune.model$optimal$lambda # the estimated lambda value
 

@@ -1,9 +1,13 @@
 
 tunePLANN <- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-                           data, cv=10, inter, size, decay, maxit, MaxNWts){
+                           data, cv=10, inter, size, decay, maxit, MaxNWts,seed=NULL){
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   data.plann <- data[,c(times, failures, group, cov.quanti, cov.quali)]
-
+  set.seed(seed)
   sample_id <- sample(nrow(data.plann))
   folds <- cut(seq(1,nrow(data.plann)), breaks=cv, labels=FALSE)
   folds_id <- folds[sample_id]

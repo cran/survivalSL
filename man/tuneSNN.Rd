@@ -11,7 +11,7 @@ This function finds the optimal n.nodes, decay, batch.size, and epochs parameter
 
 \usage{
 tuneSNN(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-data, cv=10, n.nodes, decay, batch.size, epochs)
+data, cv=10, n.nodes, decay, batch.size, epochs, seed=NULL)
 }
 
 \arguments{
@@ -24,8 +24,9 @@ data, cv=10, n.nodes, decay, batch.size, epochs)
     \item{cv}{The value of the number of folds. The default value is 10.}
   \item{n.nodes}{The number of hidden nodes optimized over.}
   \item{decay}{The value of the weight decay optimized over.}
-  \item{batch.size}{The value of batch size}
-  \item{epochs}{The value of epochs}
+  \item{batch.size}{The value of batch size.}
+  \item{epochs}{The value of epochs.}
+  \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
  }
 
 

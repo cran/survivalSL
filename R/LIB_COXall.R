@@ -44,7 +44,7 @@ LIB_COXall<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NU
   .pred.temp <- t(.sumcoxphsurv$surv)
   .time.temp <- .sumcoxphsurv$time
   .obj <- list(model=.coxph,
-               library="LIB_COXaic",
+               library="LIB_COXall",
                group=group, cov.quanti=cov.quanti, cov.quali=cov.quali,
                data=data.frame(times=data[,times], failures=data[,failures],
                                data[, !(dimnames(data)[[2]] %in% c(times, failures))]),

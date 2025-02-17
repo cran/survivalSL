@@ -1,6 +1,11 @@
 
 tuneCOXlasso<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL, data,
-                          cv=10, parallel=FALSE, lambda){
+                          cv=10, parallel=FALSE, lambda,seed=NULL){
+  
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   .outcome <- paste("Surv(", times, ",", failures, ")")
 
@@ -38,10 +43,11 @@ tuneCOXlasso<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=
     .cov <- cbind(.bs,.bin)
     .x <- cbind(data[,group], .cov, .cov * data[,group])
     .y <- Surv(data[,times], data[,failures])
+    set.seed(seed)
+    foldid <- sample(rep(seq(cv), length.out = nrow(.x)))
     .cv.lasso <- cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance",
-                             nfolds = cv, parallel = parallel, alpha=1, penalty.factor = c(0, rep(1, .l-1)),keep=F,
+                             nfolds = cv, foldid=foldid, parallel = parallel, alpha=1, penalty.factor = c(0, rep(1, .l-1)),keep=F,
                              lambda=lambda)
-
   }
 
   else{
@@ -71,9 +77,10 @@ tuneCOXlasso<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=
     .cov <- cbind(.bs,.bin)
     .x <- .cov
     .y <- Surv(data[,times], data[,failures])
-
+    set.seed(seed)
+    foldid <- sample(rep(seq(cv), length.out = nrow(.x)))
     .cv.lasso <- cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance",
-                           nfolds = cv, parallel = parallel, alpha=1,keep=F,
+                           nfolds = cv,foldid=foldid, parallel = parallel, alpha=1,keep=F,
                              lambda=lambda
       )
   }

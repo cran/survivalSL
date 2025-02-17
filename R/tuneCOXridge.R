@@ -1,6 +1,10 @@
 
 tuneCOXridge <- function(times, failures, group=NULL, cov.quanti=NULL,
-                           cov.quali=NULL, data, cv=10,  parallel=FALSE, lambda){
+                           cov.quali=NULL, data, cv=10,  parallel=FALSE, lambda,seed=NULL){
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   .outcome <- paste("Surv(", times, ",", failures, ")")
 
@@ -37,7 +41,9 @@ tuneCOXridge <- function(times, failures, group=NULL, cov.quanti=NULL,
     .cov <- cbind(.bs,.bin)
     .x <- cbind(data[,group], .cov, .cov * data[,group])
     .y <- Surv(data[,times], data[,failures])
-    .cv.ridge <- cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance", nfolds = cv,
+    set.seed(seed)
+    foldid <- sample(rep(seq(cv), length.out = nrow(.x)))
+    .cv.ridge <- cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance", nfolds = cv, foldid=foldid,
                            parallel = parallel, alpha=0, penalty.factor = c(0, rep(1, .l-1)),
                            lambda=lambda)
   }
@@ -68,8 +74,10 @@ tuneCOXridge <- function(times, failures, group=NULL, cov.quanti=NULL,
     .cov <- cbind(.bs,.bin)
     .x <- .cov
     .y <- Surv(data[,times], data[,failures])
+    set.seed(seed)
+    foldid <- sample(rep(seq(cv), length.out = nrow(.x)))
     .cv.ridge <- cv.glmnet(x=.x, y=.y, family = "cox",  type.measure = "deviance",
-                             parallel = parallel, alpha=0, nfolds = cv,
+                             parallel = parallel, alpha=0, nfolds = cv, foldid=foldid,
                              lambda=lambda)
   }
   return(list(optimal=list(lambda=.cv.ridge$lambda.min),

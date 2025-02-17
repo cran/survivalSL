@@ -37,7 +37,7 @@ LIB_PHgompertz <- function(times, failures, group=NULL, cov.quanti=NULL, cov.qua
                      inits=c(-1,1/mean(data[,times])),
                      hessian=F, method="Nelder-Mead")
 
-  .flex.cum=summary(.flex, type="cumhaz")
+  .flex.cum=summary(.flex, type="cumhaz")[[1]]
 
   .H0 <- data.frame(value = .flex.cum$est, time = .flex.cum$time)
 

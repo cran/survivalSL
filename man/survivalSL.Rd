@@ -12,7 +12,7 @@ survivalSL(methods, metric="ci",  data, times, failures, group=NULL,
 cov.quanti=NULL, cov.quali=NULL, cv=10, param.tune=NULL, pro.time=NULL,
 optim.local.min=FALSE, ROC.precision=seq(.01,.99,.01),
 param.weights.fix=NULL, param.weights.init=NULL,
-keep.predictions=TRUE, progress=TRUE)
+keep.predictions=TRUE, progress=TRUE,seed=NULL)
 }
 
 \arguments{
@@ -32,7 +32,9 @@ keep.predictions=TRUE, progress=TRUE)
   \item{param.weights.fix}{A vector with the parameters of the multinomial logistic regression which generates the weights of the algorithms declared in \code{methods}. When completed, the related parameters are not estimated. The default value is NULL: the parameters are estimated by a \code{cv}-fold cross-validation. See details.}
    \item{param.weights.init}{A vector with the initial values of the parameters of the multinomial logistic regression which generates the weights of the algorithms declared in \code{methods}. The default value is NULL: the initial values are equaled to 0. See details.}
    \item{keep.predictions}{A logical value specifying if all the predictions for all the \code{methods} are saved. If \code{FALSE}, only the predictions related to the SL are saved (for space saving). The default is \code{TRUE}.}
-   \item{progress}{A logical value to print a progress bar in the R console. The default is \code{TRUE}}
+   \item{progress}{A logical value to print a progress bar in the R console. The default is \code{TRUE}.}
+   \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
+   
  }
 
 \details{
@@ -56,7 +58,7 @@ The following learners are available:
   \code{"LIB_RSF"} \tab Survival Random Forest \tab
   randomForestSRC  \cr
   \code{"LIB_SNN"} \tab (Python-based) Survival Neural Network \tab survivalmodels \cr
-  \code{"LIB_PLANN"} \tab (Python-based) Survival Neural Network \tab survivalPLANN \cr}
+  \code{"LIB_PLANN"} \tab Survival Neural Network \tab survivalPLANN \cr}
 
 The following loss functions for the estimation of the super learner weigths are available (\code{metric}):
 \itemize{
@@ -78,6 +80,7 @@ The following loss functions for the estimation of the super learner weigths are
 \item{predictors}{A list with the predictors involved in \code{group}, \code{cov.quanti} and \code{cov.quali}.}
 \item{ROC.precision}{The percentiles (between 0 and 1) of the prognostic variable used for computing each point of the time dependent ROC curve.}
 \item{cv}{The number of splits for cross-validation.}
+\item{seed}{The number value used to initialize a random number generator.}
 \item{pro.time}{The maximum delay for which the capacity of the variable is evaluated.}
 \item{models}{A list with the estimated models/algorithms included in the SL.}
 \item{weights}{A list composed by two vectors: the regressions \code{coefficients} of the logistic multinomial regression and the resulting weights' \code{values}}
@@ -95,7 +98,7 @@ data(dataDIVAT2)
 # The Super Learner based from the first 250 individuals of the data base
 sl1 <- survivalSL(methods=c("LIB_AFTgamma", "LIB_PHgompertz"),  metric="ci",
   data=dataDIVAT2[1:250,],  times="times", failures="failures", group="ecd",
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant"), cv=5)
+  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant"), cv=5, seed=42)
 
 # Individual prediction
 pred <- predict(sl1, newdata=data.frame(age=c(52,52), hla=c(0,1),

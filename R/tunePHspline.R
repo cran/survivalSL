@@ -1,6 +1,11 @@
 
 tunePHspline<- function(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL, data,
-                          cv=10, k){
+                          cv=10, k,seed=NULL){
+  
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
 .outcome <- paste("Surv(", times, ",", failures, ")")
 
@@ -34,7 +39,7 @@ else{
 
 .time <- sort(unique(data[,times]))
 .grid <-  expand.grid(k=k, u=0)
-
+set.seed(seed)
 sample_id <- sample(nrow(data))
 folds <- cut(seq(1,nrow(data)), breaks=cv, labels=FALSE)
 folds_id <- folds[sample_id]

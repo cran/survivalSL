@@ -11,7 +11,7 @@ This function finds the optimal lambda and alpha parameters for an elastic net C
 
 \usage{
 tuneCOXen(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-data, cv=10, parallel=FALSE, alpha, lambda)
+data, cv=10, parallel=FALSE, alpha, lambda,seed=NULL)
 }
 
 \arguments{
@@ -25,15 +25,16 @@ data, cv=10, parallel=FALSE, alpha, lambda)
   \item{parallel}{If \code{TRUE}, use parallel \code{foreach} to fit each fold. The default is \code{FALSE}.}
   \item{alpha}{The values of the regularization parameter alpha optimized over.}
   \item{lambda}{The values of the regularization parameter lambda optimized over.}
+  \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}}
  }
 
 \details{
-The function runs the \code{cv.glmnet} function of the \code{glmnet} package.
+The function runs the \code{cv.glmnet} function of the \code{glmnet} package and the \code{glmnet_basesurv} function of the \code{hdnom} package.
 }
 
 \value{
-\item{optimal}{The value of lambda that gives the minimum mean cross-validated error.}
-\item{results}{The data frame with the mean cross-validated errors for each lambda values.}
+\item{optimal}{The value of lambda that gives the minimum mean deviance.}
+\item{results}{The data frame with the mean deviance for each lambda values.}
 }
 
 \references{
@@ -45,7 +46,7 @@ data(dataDIVAT2)
 
 tune.model <- tuneCOXen(times="times", failures="failures", data=dataDIVAT2,
   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), cv=5,
-  alpha=seq(.1, 1, by=.1), lambda=seq(.1, 1, by=.1))
+  alpha=seq(.1, 1, by=.1), lambda=seq(.1, 1, by=.1),seed=42)
 
 tune.model$optimal$lambda # the estimated lambda value
 

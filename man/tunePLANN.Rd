@@ -11,7 +11,7 @@ This function finds the optimal inter, size, decay, maxit, and MaxNWts parameter
 
 \usage{
 tunePLANN(times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
-data, cv=10, inter, size, decay, maxit, MaxNWts)
+data, cv=10, inter, size, decay, maxit, MaxNWts, seed=NULL)
 }
 
 \arguments{
@@ -27,6 +27,7 @@ data, cv=10, inter, size, decay, maxit, MaxNWts)
   \item{decay}{The parameter for weight decay.}
   \item{maxit}{The maximum number of iterations.}
   \item{MaxNWts}{The maximum allowable number of weights.}
+  \item{seed}{A numeric value for random seed for reproducibility. The default is \code{NULL}.}
  }
 
 
@@ -53,7 +54,7 @@ data(dataDIVAT2)
 
 tune.model <- tunePLANN(times="times", failures="failures", data=dataDIVAT2[1:300,],
   cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"), cv=3,
-  inter=1, size=c(16, 32), decay=0.01, maxit=50, MaxNWts=10000)
+  inter=1, size=c(16, 32), decay=0.01, maxit=50, MaxNWts=10000, seed=42)
 
 tune.model$optimal # the optimal hyperparameters
 

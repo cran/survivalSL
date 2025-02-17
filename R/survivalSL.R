@@ -1,13 +1,17 @@
 
-survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
+survivalSL <- function(methods, metric="ci", data, times, failures, group=NULL, cov.quanti=NULL, cov.quali=NULL,
                      cv=10, param.tune=NULL, pro.time=NULL,  optim.local.min=FALSE,
                      ROC.precision=seq(.01,.99,.01), param.weights.fix=NULL,
-                     param.weights.init=NULL, keep.predictions=TRUE,
-                     progress=TRUE) {
+                     param.weights.init=NULL, keep.predictions=TRUE, 
+                     progress=TRUE,seed=NULL) {
 
   #####################
   ### Quality tests ###
   #####################
+  
+  if(is.null(seed)){
+    seed<-sample(1:10000,1)
+  }
 
   if(length(methods)<=1)
   { stop("Number of methods need to be greater or equal to 2 to estimate a SuperLearner")   }
@@ -1125,7 +1129,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
       if(is.null(param.tune[[me]]$k)==T | length(param.tune[[me]]$k)>1){
 
         .tune<- tunePHspline(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                               cov.quali=cov.quali, data=data, cv=cv,
+                               cov.quali=cov.quali, data=data, cv=cv, seed=seed,
                                k=param.tune[[me]]$k)
         .tune.optimal[[me]]=.tune$optimal
         .tune.results[[me]]=.tune$results
@@ -1152,7 +1156,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
       if(is.null(param.tune[[me]]$lambda)==T | length(param.tune[[me]]$lambda)>1){
 
         .tune<- tuneCOXlasso(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                               cov.quali=cov.quali, data=data, cv=cv,
+                               cov.quali=cov.quali, data=data, cv=cv, seed=seed,
                                parallel=FALSE, lambda=param.tune[[me]]$lambda)
 
         .tune.optimal[[me]]=.tune$optimal
@@ -1178,7 +1182,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
 
       if(is.null(param.tune[[me]]$lambda)==T | length(param.tune[[me]]$lambda)>1){
         .tune<- tuneCOXridge(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                               cov.quali=cov.quali,  data=data, cv=cv,
+                               cov.quali=cov.quali,  data=data, cv=cv, seed=seed,
                                parallel = FALSE, lambda=param.tune[[me]]$lambda)
         .tune.optimal[[me]]<-.tune$optimal
         .tune.results[[me]]<-.tune$results
@@ -1207,7 +1211,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
       }
       else{
         .tune <- tuneCOXen(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                             cov.quali=cov.quali, data=data, cv=cv,
+                             cov.quali=cov.quali, data=data, cv=cv,seed=seed,
                              parallel=FALSE,
                              alpha=param.tune[[me]]$alpha,
                              lambda=param.tune[[me]]$lambda)
@@ -1301,7 +1305,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
 
         .tune <- tuneSNN(times=times, failures=failures, group=group,
                                cov.quanti=cov.quanti, cov.quali=cov.quali,
-                               data=data, cv=cv,
+                               data=data, cv=cv, seed=seed,
                                n.nodes=param.tune[[me]]$n.nodes,
                                decay=param.tune[[me]]$decay,
                                batch.size=param.tune[[me]]$batch.size,
@@ -1342,7 +1346,7 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
 
         .tune <- tunePLANN(times=times, failures=failures, group=group,
                          cov.quanti=cov.quanti, cov.quali=cov.quali,
-                         data=data, cv=cv,
+                         data=data, cv=cv, seed=seed,
                          inter=param.tune[[me]]$inter,
                          size=param.tune[[me]]$size,
                          decay=param.tune[[me]]$decay,
@@ -1385,121 +1389,131 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
   ### Cross-Validation  ##
   ########################
 
-  sample_id=sample(nrow(data))
-  folds <- cut(seq(1,nrow(data)), breaks=cv, labels=FALSE)
-  folds_id=folds[sample_id]
-  data$folds=folds_id
-
-  CV<-vector("list",cv*M)
-  j<-1
-  for(m in 1:M){
-    for (k in 1:cv){
-      CV[[j]]<-list(train= data[data$folds!=k, ],valid=data[data$folds==k, ], num_method=m)
-      j<-j+1
+ 
+  
+  set.seed(seed)
+  data$folds<-sample(rep(1:cv, length.out = nrow(data)))
+  
+  CV <- list()
+  
+  for (m in 1:M) {
+    for (k in 1:cv) {
+      CV[[length(CV) + 1]] <- list(
+        train = data[data$folds != k, ], 
+        valid = data[data$folds == k, ], 
+        num_method = m
+      )
     }
   }
+  
 
-  CV_all_method<-function(CV, method, Tune, times, failures, group, cov.quanti, cov.quali,time.pred){
-    num_method<-CV$num_method
+  
+  
+
+  CV_all_method<-function(x, method, Tune, times, failures, group, cov.quanti, cov.quali,time.pred){
+    num_method<-x$num_method
     meth<-method[num_method]
     if(meth == "LIB_AFTweibull"){
       fit<-LIB_AFTweibull(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                       cov.quali=cov.quali, data=CV$train)
-      pred=predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                       cov.quali=cov.quali, data=x$train)
+      pred=predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_AFTggamma"){
       fit<-LIB_AFTggamma(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                      cov.quali=cov.quali, data=CV$train)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                      cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_AFTgamma"){
       fit<-LIB_AFTgamma(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                     cov.quali=cov.quali, data=CV$train)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                     cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_AFTllogis"){
       fit<-LIB_AFTllogis(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                     cov.quali=cov.quali, data=CV$train)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                     cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_PHgompertz"){
       fit<-LIB_PHgompertz(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                       cov.quali=cov.quali, data=CV$train)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                       cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_PHexponential"){
       fit<-LIB_PHexponential(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                          cov.quali=cov.quali, data=CV$train)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                          cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_PHspline"){
       fit<-LIB_PHspline(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                     cov.quali=cov.quali, data=CV$train,
+                     cov.quali=cov.quali, data=x$train,
                      k=Tune[[num_method]]$k)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_COXlasso"){
       fit<-LIB_COXlasso(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                     cov.quali=cov.quali, data=CV$train,
+                     cov.quali=cov.quali, data=x$train,
                      lambda=Tune[[num_method]]$lambda)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth == "LIB_COXen"){
       fit<-LIB_COXen(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                 cov.quali=cov.quali, data=CV$train,
+                 cov.quali=cov.quali, data=x$train,
                   alpha=Tune[[num_method]]$alpha, lambda=Tune[[num_method]]$lambda)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth =="LIB_COXridge"){
       fit<-LIB_COXridge(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                    cov.quali=cov.quali, data=CV$train, lambda=Tune[[num_method]]$lambda)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                    cov.quali=cov.quali, data=x$train, lambda=Tune[[num_method]]$lambda)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
 
     }
     if(meth =="LIB_COXaic"){
-      fit<-LIB_COXaic(times=times, failures=failures, group=group, data=data,
+      fit<-LIB_COXaic(times=times, failures=failures, group=group, data=x$train,
                    final.model = Tune[[num_method]]$final.model, cov.quanti=cov.quanti,
                    cov.quali=cov.quali)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
 
     }
     if(meth =="LIB_COXall"){
       fit<-LIB_COXall(times=times, failures=failures, group=group,
-                   cov.quanti=cov.quanti, cov.quali=cov.quali, data=data)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+                   cov.quanti=cov.quanti, cov.quali=cov.quali, data=x$train)
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
 
     }
     if(meth =="LIB_RSF"){
       fit<-LIB_RSF(times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                   cov.quali=cov.quali,  data=CV$train,
+                   cov.quali=cov.quali,  data=x$train,
                    nodesize=Tune[[num_method]]$nodesize, mtry=Tune[[num_method]]$mtry,
                    ntree=Tune[[num_method]]$ntree)
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
 
     }
     if(meth =="LIB_SNN"){
-      fit<-LIB_SNN(times=times, failures=failures, group=group,  cov.quanti=cov.quanti, cov.quali=cov.quali, data=CV$train,
+      fit<-LIB_SNN(times=times, failures=failures, group=group,  cov.quanti=cov.quanti, cov.quali=cov.quali, data=x$train,
                      n.nodes=as.numeric(Tune[[num_method]]$n.nodes),
                      decay=as.numeric(Tune[[num_method]]$decay),
                      batch.size=as.integer(Tune[[num_method]]$batch.size),
                      epochs=as.integer(Tune[[num_method]]$epochs))
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     if(meth =="LIB_PLANN"){
-      fit<-LIB_PLANN(times=times, failures=failures, group=group,  cov.quanti=cov.quanti, cov.quali=cov.quali, data=CV$train,
+      fit<-LIB_PLANN(times=times, failures=failures, group=group,  cov.quanti=cov.quanti, cov.quali=cov.quali, data=x$train,
                    inter=as.numeric(Tune[[num_method]]$inter),
                    size=as.numeric(Tune[[num_method]]$size),
                    decay=as.numeric(Tune[[num_method]]$decay),
                    maxit=as.integer(Tune[[num_method]]$maxit),
                    MaxNWts=as.integer(Tune[[num_method]]$MaxNWts))
-      pred<-predict(fit, newtimes=time.pred, newdata=CV$valid)$predictions
+      pred<-predict(fit, newtimes=time.pred, newdata=x$valid)$predictions
     }
     return(pred)
   }
 
+
+  
   preFitCV<-lapply(CV, CV_all_method,method=methods,
-                   Tune=.tune.optimal, times=times, failures=failures, group=group, cov.quanti=cov.quanti,
-                   cov.quali=cov.quali, time.pred=time.pred)
+                     Tune=.tune.optimal, times=times, failures=failures, group=group, cov.quanti=cov.quanti,
+                     cov.quali=cov.quali, time.pred=time.pred)
+ 
 
   FitCV<-vector("list", M)
   for(m in 1:M){
@@ -1514,6 +1528,10 @@ survivalSL <- function(methods, metric="ci",  data, times, failures, group=NULL,
 
     }
   }
+  
+
+  
+  
   names(FitCV)<-names.meth
 
   rm(preFitCV, CV)
@@ -1736,16 +1754,17 @@ setTxtProgressBar(pb, ip)
   res<-list(times=time.pred,
             predictions=temp.predictions,
             data=data.frame(times=data[,times], failures=data[,failures],
-                            data[, !(dimnames(data)[[2]] %in% c(times, failures))]),
+                            data[, !(dimnames(data)[[2]] %in% c(times, failures,"folds"))]),
             outcomes=list(times=times, failures=failures),
             predictors=list(group=group, cov.quanti=cov.quanti, cov.quali=cov.quali),
             ROC.precision=ROC.precision,
             cv=cv,
+            seed=seed,
             pro.time=pro.time,
             methods=methods,
             models=.model,
             weights=list(coefficients=estim$par, values=w.sl),
-            metric=list(metric=metric, value=estim$value),
+            metric=list(metric=metric, value = ifelse(metric %in% c("auc", "ci"), -estim$value, estim$value)),
             param.tune=list(optimal=.tune.optimal, results=.tune.results))
 
   class(res) <- "sltime"

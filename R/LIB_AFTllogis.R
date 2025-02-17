@@ -38,7 +38,7 @@ LIB_AFTllogis <- function(times, failures, group=NULL, cov.quanti=NULL,cov.quali
                      dist = "llogis",
                      hessian=FALSE, method="Nelder-Mead")
 
-  .flex.cum=summary(.flex, type="cumhaz", ci=FALSE)
+  .flex.cum=summary(.flex, type="cumhaz", ci=FALSE)[[1]]
 
   .H0 <- data.frame(value = .flex.cum$est, time = .flex.cum$time)
 

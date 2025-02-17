@@ -36,7 +36,7 @@ LIB_PHspline <- function(times, failures, group=NULL, cov.quanti=NULL,
   .flex<-flexsurvspline(.f, data = data, scale="hazard", k=k,
                      hessian=F, method="Nelder-Mead")
 
-  .flex.cum=summary(.flex, type="cumhaz")
+  .flex.cum=summary(.flex, type="cumhaz")[[1]]
 
   .H0 <- data.frame(value = .flex.cum$est, time = .flex.cum$time)
 
