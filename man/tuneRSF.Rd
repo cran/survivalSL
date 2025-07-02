@@ -10,20 +10,17 @@ This function finds the optimal nodesize, mtry, and ntree parameters for a survi
 }
 
 \usage{
-tuneRSF(times, failures, group=NULL, cov.quanti=NULL,
-cov.quali=NULL, data, nodesize, mtry, ntree)
+tuneRSF(formula, data, nodesize=c(2, 4, 6, 10, 20, 30, 50, 100),
+   mtry, ntree=500, seed=NULL)
 }
 
 \arguments{
-  \item{times}{The name of the variable related the numeric vector with the follow-up times.}
-  \item{failures}{The name of the variable related the numeric vector with the event indicators (0=right censored, 1=event).}
-  \item{group}{The name of the variable related to the exposure/treatment. This variable shall have only two modalities encoded 0 for the untreated/unexposed patients and 1 for the treated/exposed ones. The default value is \code{NULL}: no specific exposure/treatment is considered. When a specific exposure/treatment is considered, it will be forced in the algorithm or related interactions will be tested when possible.}
-  \item{cov.quanti}{The name(s) of the variable(s) related to the possible quantitative covariates. These variables must be numeric.}
-  \item{cov.quali}{The name(s) of the variable(s) related to the possible qualitative covariates. These variables must be numeric with two levels: 0 and 1. A complete disjunctive form must be used for covariates with more levels.}
-  \item{data}{A data frame for training the model in which to look for the variables related to the status of the follow-up time (\code{times}), the event (\code{failures}), the optional treatment/exposure (\code{group}) and the covariables included in the previous model (\code{cov.quanti} and \code{cov.quali}).}
+ \item{formula}{A formula object, with the response on the left of a ~ operator, and the terms on the right. The response must be a survival object as returned by the \code{Surv} function.}
+  \item{data}{A data frame for training the model with the same covariates as in the formula.}
     \item{nodesize}{The values of the node size optimized over.}
   \item{mtry}{The numbers of variables randomly sampled as candidates at each split optimized over.}
   \item{ntree}{The numbers of trees optimized over.}
+   \item{seed}{A random seed to ensure reproducibility during the bootstrapping process. If \code{NULL}, a seed is randomly assigned.}
  }
 
 \details{
@@ -40,17 +37,17 @@ Ishwaran H. and Kogalur U.B. (2007). Random survival forests for R, Rnews, 7(2):
 }
 
 \examples{
-data(dataDIVAT2)
+data("dataDIVAT2")
 
-tune.model <- tuneRSF(times="times", failures="failures", data=dataDIVAT2,
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
+formula<-Surv(times,failures) ~ age + hla + retransplant + ecd
+
+tune.model <- tuneRSF(formula, data=dataDIVAT2,
   nodesize=c(100, 250, 500), mtry=1, ntree=100)
 
 tune.model$optimal # the estimated nodesize value
 
 # The estimation of the training modelwith the corresponding lambda value
-model <- LIB_RSF(times="times", failures="failures", data=dataDIVAT2,
-  cov.quanti=c("age"),  cov.quali=c("hla", "retransplant", "ecd"),
+model <- LIB_RSF(formula, data=dataDIVAT2,
   nodesize=tune.model$optimal$nodesize, mtry=1, ntree=100)
 
 # The resulted predicted survival of the first subject of the training sample
