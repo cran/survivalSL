@@ -1,5 +1,5 @@
-3fb967bb562c1c17a323c3e166fc8183 *DESCRIPTION
-1e9f72231d30d84575a42941404e1705 *NAMESPACE
+16306f38587fb6b5b36d7608a858a61c *DESCRIPTION
+5a55293d636cff7cefde7f8520c5e032 *NAMESPACE
 2d5f3a31effc50b9cbbea5bfcc130f3f *R/LIB_AFTgamma.R
 a9cc1c90d959ae069afaa5c59cf73981 *R/LIB_AFTggamma.R
 d1c29a5e45a2ccd314fa43f5aa42fb80 *R/LIB_AFTllogis.R
@@ -14,11 +14,11 @@ a43297a49f3aaaca05946da3b63d07ff *R/LIB_PHexponential.R
 836fd094e1da7b506b18fc0dcfffc4f8 *R/LIB_PHspline.R
 1ad42d54cdfa7558ea9a910f8702aca3 *R/LIB_PLANN.R
 4459b46ce6fd06288a9d67b1454c5df0 *R/LIB_RSF.R
-7adf99b19dd40f0d83296b4c9eafae1a *R/metrics.R
+d21f4436cafd170b7f3696211a9510e7 *R/metrics.R
 6afaa46a358b281b8adca33cb278e648 *R/plot.libsl.R
 f603646941a32205b912a9b5ec44f888 *R/plot.sltime.R
 d378247c7dc7899b0390edbff7dc07dd *R/predict.libsl.R
-ec724a27f6087a1a82152a930fcd90c5 *R/predict.sltime.R
+a4d8110f4b83caf7b3cf844a6852cb8c *R/predict.sltime.R
 a29c9069a07de6274e048ba6dde92a97 *R/print.libsl.R
 08724f525980a43ffb5cbe4a9c77d3d8 *R/print.sltime.R
 155d9888e119620366251345ddb179ca *R/summary.libsl.R
@@ -30,7 +30,7 @@ a7be3a06997fa88677d2f956251b218b *R/survivalSL.R
 c61e53f691e82913ab65ac1de4c04dd6 *R/tunePHspline.R
 7fb4d41c55eaf4f8a993ab8624b010dc *R/tunePLANN.R
 3896baee53ae5895e38b1c5f9b66a840 *R/tuneRSF.R
-12cadbb7232cc3a8069a192c5d2af919 *README.md
+5f8d05b960c240093b3e31ac07be359e *README.md
 570e495efcbc2542bf799b691f7c49c5 *data/dataDIVAT2.rda
 243c833d5bfcbad3fe263c32550f9e87 *data/dataDIVAT3.rda
 2d06d14f04cc760ea02019ffcf0619e8 *data/dataOFSEP.rda
@@ -66,4 +66,4 @@ dc741f32a30e66cb7d9053303c8d3a24 *man/tuneCOXlasso.Rd
 13c3b652c300eabea6e99515dcad9aaf *man/tuneCOXridge.Rd
 a6b0d3f21c4f1ec72386628013a015a4 *man/tunePHspline.Rd
 a787816a340758294ae58578f478ae65 *man/tunePLANN.Rd
-bc0995bcb43cc71981c113d9ec1fa2f8 *man/tuneRSF.Rd
+2d4d5941e5cd285aac9fe74dc0e90dcc *man/tuneRSF.Rd

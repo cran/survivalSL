@@ -1,7 +1,7 @@
 Package: survivalSL
 Type: Package
 Title: Super Learner for Survival Prediction from Censored Data
-Version: 0.98
+Version: 1.0
 Depends: R (>= 4.0.0), splines, survival
 Imports: date, graphics, MASS, glmnet, caret, flexsurv,
         randomForestSRC, hdnom, survivalPLANN, dplyr, rpart, methods
@@ -11,10 +11,10 @@ LazyLoad: yes
 NeedsCompilation: no
 BugReports: https://github.com/foucher-y/survivalSL/issues
 Authors@R: c(person("Yohann", "Foucher", role = c("aut", "cre"), email = "yohann.foucher@univ-poitiers.fr", comment = c(ORCID = "0000-0003-0330-7457")), person("Camille", "Sabathe", role = "aut", email = "camille.sabathe@univ-nantes.fr", comment = c(ORCID = "0000-0001-9353-691X")) )
-Packaged: 2025-07-02 14:30:31 UTC; foucher-y
+Packaged: 2025-12-16 18:34:09 UTC; foucher-y
 Author: Yohann Foucher [aut, cre] (ORCID:
     <https://orcid.org/0000-0003-0330-7457>),
   Camille Sabathe [aut] (ORCID: <https://orcid.org/0000-0001-9353-691X>)
 Maintainer: Yohann Foucher <yohann.foucher@univ-poitiers.fr>
 Repository: CRAN
-Date/Publication: 2025-07-02 16:10:02 UTC
+Date/Publication: 2025-12-16 19:10:03 UTC
